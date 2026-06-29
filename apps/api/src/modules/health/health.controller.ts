@@ -6,6 +6,7 @@ import {
 } from '@nestjs/terminus';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { PrismaService } from '../../shared/prisma/prisma.service.js';
+import { Public } from '../auth/decorators/public.decorator.js';
 
 /**
  * Health endpoint — unauthenticated, excluded from the /api/v1 prefix.
@@ -13,6 +14,7 @@ import { PrismaService } from '../../shared/prisma/prisma.service.js';
  */
 @ApiTags('Health')
 @Controller('health')
+@Public()
 export class HealthController {
   constructor(
     private readonly health: HealthCheckService,

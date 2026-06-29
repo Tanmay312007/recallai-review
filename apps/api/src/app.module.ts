@@ -9,6 +9,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { validate } from './config/env.validation.js';
+import { AuthModule } from './modules/auth/auth.module.js';
 import { HealthModule } from './modules/health/health.module.js';
 import { PrismaModule } from './shared/prisma/prisma.module.js';
 
@@ -27,7 +28,11 @@ import { PrismaModule } from './shared/prisma/prisma.module.js';
     // ── Health check ──────────────────────────────────────────────────────
     HealthModule,
 
-    // Phase 2+: AuthModule, UsersModule, DocumentsModule, DecksModule, ...
+    // ── Authentication (register/login/refresh/logout/reset) ────────────────
+    // Registers the global JwtAuthGuard (secure-by-default).
+    AuthModule,
+
+    // Phase 2+: UsersModule, DocumentsModule, DecksModule, ...
   ],
   providers: [],
 })

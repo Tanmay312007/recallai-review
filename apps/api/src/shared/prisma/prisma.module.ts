@@ -2,9 +2,8 @@ import { Global, Module } from '@nestjs/common';
 import { PrismaService } from './prisma.service.js';
 
 /**
- * PrismaModule — globally available (isGlobal: true via ConfigModule).
- * Every service can inject PrismaService without importing PrismaModule.
- * TODO(spec): Consider making this @Global() explicitly once modules grow.
+ * PrismaModule — marked @Global() so every feature module can inject
+ * PrismaService via DI without re-importing this module.
  */
 @Global()
 @Module({

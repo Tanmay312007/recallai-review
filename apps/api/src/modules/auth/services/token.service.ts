@@ -68,11 +68,14 @@ export class TokenService {
    * Generate a new access token for the given user.
    */
   signAccessToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): string {
-    return jwt.sign(payload, this.privateKey, {
+    const options: jwt.SignOptions = {
       algorithm: 'RS256',
-      expiresIn: this.accessExpiry,
+      // SAFETY: accessExpiry is a validated env string (e.g. "15m"); cast to the
+      // jsonwebtoken duration type, which the runtime accepts as a string.
+      expiresIn: this.accessExpiry as jwt.SignOptions['expiresIn'],
       subject: payload.sub,
-    });
+    };
+    return jwt.sign(payload, this.privateKey, options);
   }
 
   /**
@@ -117,6 +120,37 @@ export class TokenService {
       refreshToken: randomUUID(),
       refreshExpiresAt: new Date(Date.now() + this.refreshExpiryMs),
     };
+  }
+
+  /**
+   * Sign a short-lived (1h), single-purpose RS256 token for password reset.
+   *
+   * Using a stateless signed token (rather than a DB row) keeps the forgot/reset
+   * flow self-contained: the token carries the user id + a `purpose` claim and
+   * is verified with the same public key. The 1-hour expiry bounds the window.
+   */
+  signPasswordResetToken(userId: string): string {
+    const options: jwt.SignOptions = {
+      algorithm: 'RS256',
+      // SAFETY: literal duration string accepted by jsonwebtoken at runtime.
+      expiresIn: '1h' as jwt.SignOptions['expiresIn'],
+    };
+    return jwt.sign({ sub: userId, purpose: 'password_reset' }, this.privateKey, options);
+  }
+
+  /**
+   * Verify a password-reset token and return the user id it was issued for.
+   * Throws if the signature is invalid, the token expired, or the `purpose`
+   * claim does not match (defense against token confusion with access tokens).
+   */
+  verifyPasswordResetToken(token: string): string {
+    const decoded = jwt.verify(token, this.publicKey, {
+      algorithms: ['RS256'],
+    }) as { sub?: string; purpose?: string };
+    if (decoded.purpose !== 'password_reset' || !decoded.sub) {
+      throw new jwt.JsonWebTokenError('Invalid reset token purpose');
+    }
+    return decoded.sub;
   }
 
   /**
