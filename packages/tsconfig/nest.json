@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "RecallAI — NestJS (apps/api)",
+  "extends": "./base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "useDefineForClassFields": false,
+
+    // rootDir / outDir MUST be set in each app's own tsconfig.json
+    // because relative paths resolve against the tsconfig file's own
+    // directory, not the consuming project.
+    "declaration": false,
+    "declarationMap": false,
+    "verbatimModuleSyntax": false,
+
+    "isolatedModules": false,
+    "sourceMap": true,
+    "incremental": true,
+    "removeComments": true
+  }
+}

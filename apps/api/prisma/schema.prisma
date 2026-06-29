@@ -1,0 +1,415 @@
+// RecallAI — Canonical Database Schema
+// Version: 0.1.0-alpha
+// Source: PROMPT §5 (implement exactly, zero modifications)
+//
+// Tables:  users, user_sessions, oauth_accounts, source_documents,
+//          document_chunks, decks, deck_folders, cards, card_versions,
+//          review_logs, user_fsrs_params, export_jobs, processed_jobs,
+//          notification_prefs, study_stats
+// Enums:   Tier, DataRegion, DocumentType, DocumentStatus, CardType,
+//          BloomLevel, ProvenanceStatus, VersionEditor, ExportFormat, JobStatus
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector"), uuidOssp(map: "uuid-ossp"), pgTrgm(map: "pg_trgm")]
+}
+
+// ─────────────────────────────────────────────────────
+// USERS & AUTH
+// ─────────────────────────────────────────────────────
+
+model User {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email              String           @unique @db.VarChar(255)
+  emailVerified      Boolean          @default(false)
+  passwordHash       String?          @db.Text            // null for OAuth-only users
+  name               String?          @db.VarChar(255)
+  avatarUrl          String?          @db.Text
+  tier               Tier             @default(FREE)
+  dataRegion         DataRegion       @default(US)        // For GDPR data residency
+  stripeCustomerId   String?          @unique @db.VarChar(255)
+  stripeSubId        String?          @unique @db.VarChar(255)
+  generationSuspended Boolean         @default(false)     // Admin flag for abuse
+  deletionRequestedAt DateTime?                            // GDPR right to erasure
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  lastActiveAt       DateTime?
+
+  // Relations
+  sessions           UserSession[]
+  oauthAccounts      OAuthAccount[]
+  documents          SourceDocument[]
+  decks              Deck[]
+  cards              Card[]
+  reviewLogs         ReviewLog[]
+  fsrsParams         UserFsrsParams?
+  exportJobs         ExportJob[]
+  notificationPrefs  NotificationPrefs?
+  studyStats         StudyStats?
+
+  @@index([email])
+  @@index([stripeCustomerId])
+  @@index([tier])
+  @@map("users")
+}
+
+model UserSession {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @db.Uuid
+  tokenHash   String    @db.Text              // bcrypt hash of refresh token
+  tokenFamily String    @db.Uuid              // For theft detection
+  expiresAt   DateTime
+  lastUsedAt  DateTime?
+  userAgent   String?   @db.Text
+  ipAddress   String?   @db.VarChar(45)        // IPv6 compatible
+  revoked     Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("user_sessions")
+}
+
+model OAuthAccount {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId         String   @db.Uuid
+  provider       String   @db.VarChar(50)      // "google"
+  providerUserId String   @db.VarChar(255)
+  createdAt      DateTime @default(now())
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerUserId])
+  @@index([userId])
+  @@map("oauth_accounts")
+}
+
+// ─────────────────────────────────────────────────────
+// SOURCE DOCUMENTS
+// ─────────────────────────────────────────────────────
+
+model SourceDocument {
+  id              String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String          @db.Uuid
+  type            DocumentType    // PDF | YOUTUBE
+  status          DocumentStatus  @default(PENDING)
+  title           String          @db.VarChar(500)
+  originalName    String?         @db.VarChar(500)   // Original filename for PDF
+  storageKey      String?         @db.Text            // S3 object key
+  youtubeUrl      String?         @db.Text
+  youtubeVideoId  String?         @db.VarChar(20)
+  fileSizeBytes   Int?
+  pageCount       Int?
+  durationSeconds Int?                                // For YouTube
+  language        String          @default("en") @db.VarChar(10)
+  contentHash     String?         @db.VarChar(64)    // SHA-256 for dedup
+  processingError String?         @db.Text
+  chunkCount      Int?
+  cardCount       Int?
+  deletedAt       DateTime?                           // Soft delete
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chunks          DocumentChunk[]
+  decks           Deck[]
+
+  @@index([userId])
+  @@index([status])
+  @@index([contentHash])
+  @@map("source_documents")
+}
+
+model DocumentChunk {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  documentId   String   @db.Uuid
+  chunkIndex   Int
+  content      String   @db.Text
+  tokenCount   Int
+  pageNumber   Int?
+  startOffset  Int?
+  endOffset    Int?
+  embedding    Unsupported("vector(1536)")?  // pgvector
+  createdAt    DateTime @default(now())
+
+  document     SourceDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  cards        Card[]
+
+  @@index([documentId, chunkIndex])
+  @@map("document_chunks")
+}
+
+// ─────────────────────────────────────────────────────
+// DECKS & CARDS
+// ─────────────────────────────────────────────────────
+
+model Deck {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String      @db.Uuid
+  documentId    String?     @db.Uuid             // null for manually created decks
+  name          String      @db.VarChar(255)
+  description   String?     @db.Text
+  colorTag      String?     @db.VarChar(7)       // hex color
+  folderId      String?     @db.Uuid
+  cardCount     Int         @default(0)
+  newCardLimit  Int         @default(10)         // Max new cards per day
+  deletedAt     DateTime?                        // Soft delete (30-day trash)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document      SourceDocument? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  folder        DeckFolder? @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  cards         Card[]
+
+  @@index([userId])
+  @@index([folderId])
+  @@map("decks")
+}
+
+model DeckFolder {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  name      String   @db.VarChar(255)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  decks     Deck[]
+
+  @@index([userId])
+  @@map("deck_folders")
+}
+
+model Card {
+  id                String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String           @db.Uuid
+  deckId            String           @db.Uuid
+  chunkId           String?          @db.Uuid           // Source chunk (provenance)
+  front             String           @db.Text           // Question (max 500 chars enforced)
+  back              String           @db.Text           // Answer (max 2000 chars enforced)
+  cardType          CardType         @default(BASIC)
+  bloomLevel        BloomLevel       @default(REMEMBER)
+  isAiGenerated     Boolean          @default(true)
+  isUserModified    Boolean          @default(false)
+  isFlagged         Boolean          @default(false)
+  provenanceStatus  ProvenanceStatus @default(LINKED)
+  mediaRefs         Json?                               // Array of media objects
+  deletedAt         DateTime?                          // Soft delete
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // FSRS State (per card)
+  fsrsState         Float           @default(0)        // 0=New, 1=Learning, 2=Review
+  fsrsDue           DateTime         @default(now())
+  fsrsStability     Float           @default(0)
+  fsrsDifficulty    Float           @default(5)
+  fsrsElapsedDays   Int             @default(0)
+  fsrsScheduledDays Int             @default(0)
+  fsrsReps          Int             @default(0)
+  fsrsLapses        Int             @default(0)
+
+  user              User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deck              Deck             @relation(fields: [deckId], references: [id], onDelete: Cascade)
+  chunk             DocumentChunk?   @relation(fields: [chunkId], references: [id], onDelete: SetNull)
+  reviewLogs        ReviewLog[]
+  versions          CardVersion[]
+
+  @@index([userId])
+  @@index([deckId])
+  @@index([fsrsDue])                            // Critical: due card queries
+  @@index([deckId, fsrsDue])                    // Deck-scoped due queries
+  @@index([userId, fsrsDue])                    // Cross-deck due queries
+  @@map("cards")
+}
+
+model CardVersion {
+  id        String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  cardId    String       @db.Uuid
+  front     String       @db.Text
+  back      String       @db.Text
+  editedBy  VersionEditor @default(USER)
+  createdAt DateTime      @default(now())
+
+  card      Card         @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+  @@map("card_versions")
+}
+
+// ─────────────────────────────────────────────────────
+// REVIEW & FSRS
+// ─────────────────────────────────────────────────────
+
+model ReviewLog {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String   @db.Uuid
+  cardId           String   @db.Uuid
+  rating           Int      @db.SmallInt          // 1=Again, 2=Hard, 3=Good, 4=Easy
+  elapsedDays      Int
+  scheduledDays    Int
+  stabilityBefore  Float
+  stabilityAfter   Float
+  difficultyBefore Float
+  difficultyAfter  Float
+  reviewState      Int      @db.SmallInt          // FSRS card state after review
+  reviewedAt       DateTime @default(now())
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  card             Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@index([userId, reviewedAt], map: "review_logs_userId_reviewedAt_idx")
+  @@index([cardId])
+  @@index([userId, reviewedAt(sort: Desc)], map: "review_logs_userId_reviewedAt_desc_idx")
+  @@map("review_logs")
+}
+
+model UserFsrsParams {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String   @unique @db.Uuid
+  // FSRS v4 17 parameters
+  w                Float[]  @db.DoublePrecision   // Weight vector [w0..w16]
+  desiredRetention Float    @default(0.9)
+  maximumInterval  Int      @default(36500)
+  totalReviews     Int      @default(0)           // Used for optimization trigger
+  lastOptimizedAt  DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_fsrs_params")
+}
+
+// ─────────────────────────────────────────────────────
+// JOBS & ASYNC
+// ─────────────────────────────────────────────────────
+
+model ExportJob {
+  id         String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String      @db.Uuid
+  format     ExportFormat
+  status     JobStatus   @default(PENDING)
+  storageKey String?     @db.Text              // S3 key when ready
+  error      String?     @db.Text
+  expiresAt  DateTime?                         // 24hr download window
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("export_jobs")
+}
+
+model ProcessedJob {
+  id          String   @id @db.VarChar(255)     // SQS message ID
+  processedAt DateTime @default(now())
+
+  @@map("processed_jobs")
+}
+
+// ─────────────────────────────────────────────────────
+// NOTIFICATIONS & SETTINGS
+// ─────────────────────────────────────────────────────
+
+model NotificationPrefs {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @unique @db.Uuid
+  emailReminders  Boolean  @default(true)
+  reminderTime    String   @default("09:00") @db.VarChar(5)  // HH:MM
+  timezone        String   @default("UTC") @db.VarChar(50)
+  marketingEmails Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notification_prefs")
+}
+
+model StudyStats {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String   @unique @db.Uuid
+  currentStreak       Int      @default(0)
+  longestStreak       Int      @default(0)
+  lastStudiedAt       DateTime?
+  totalCardsReviewed  Int      @default(0)
+  totalStudyMinutes   Int      @default(0)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("study_stats")
+}
+
+// ─────────────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────────────
+
+enum Tier {
+  FREE
+  PRO
+}
+
+enum DataRegion {
+  US
+  EU
+}
+
+enum DocumentType {
+  PDF
+  YOUTUBE
+}
+
+enum DocumentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum CardType {
+  BASIC
+  CLOZE
+  DEFINITION
+}
+
+enum BloomLevel {
+  REMEMBER
+  UNDERSTAND
+  APPLY
+  ANALYZE
+}
+
+enum ProvenanceStatus {
+  LINKED          // Card linked to active source chunk
+  SOURCE_DELETED  // Source document was deleted; card preserved
+  USER_CREATED    // Manually created; no source
+}
+
+enum VersionEditor {
+  USER
+  AI
+}
+
+enum ExportFormat {
+  JSON
+  CSV
+  ANKI_JSON
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}

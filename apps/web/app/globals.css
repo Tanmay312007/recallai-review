@@ -1,0 +1,66 @@
+/**
+ * RecallAI — Global CSS (PROMPT §8.1 Design System — OKLCH Color Tokens).
+ *
+ * These are the authoritative design tokens. Tailwind utility classes in
+ * tailwind.config.ts reference these variables. Components must never use
+ * hardcoded hex values — always reference a variable from :root.
+ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* ── Backgrounds (PROMPT §8.1 verbatim) ──────────────────────────── */
+  --bg-base: oklch(14% 0.01 260);
+  --bg-surface: oklch(18% 0.01 260);
+  --bg-elevated: oklch(22% 0.015 260);
+  --bg-overlay: oklch(26% 0.015 260);
+
+  /* ── Text ──────────────────────────────────────────────────────────── */
+  --text-primary: oklch(94% 0.005 260);
+  --text-secondary: oklch(65% 0.01 260);
+  --text-muted: oklch(45% 0.01 260);
+  --text-disabled: oklch(35% 0.01 260);
+
+  /* ── Brand ──────────────────────────────────────────────────────────── */
+  --brand: oklch(65% 0.18 255);
+  --brand-hover: oklch(70% 0.18 255);
+  --brand-subtle: oklch(25% 0.06 255);
+
+  /* ── Semantic ──────────────────────────────────────────────────────── */
+  --success: oklch(72% 0.17 145);
+  --warning: oklch(80% 0.17 70);
+  --error: oklch(62% 0.22 25);
+  --info: oklch(70% 0.15 230);
+
+  /* ── FSRS Rating Colors ─────────────────────────────────────────────── */
+  --rating-again: oklch(62% 0.22 25);   /* red */
+  --rating-hard: oklch(75% 0.18 50);    /* orange */
+  --rating-good: oklch(72% 0.17 145);   /* green */
+  --rating-easy: oklch(70% 0.15 230);   /* blue */
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Focus ring for accessibility (keyboard navigation). */
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand;
+  }
+}
+
+@layer components {
+  /* Shared utility: card surface treatment. */
+  .card-surface {
+    @apply rounded-lg bg-background-elevated border border-bg-overlay;
+  }
+
+  /* Rating button colors — used in the review session (§8.2). */
+  .rating-again { color: var(--rating-again); }
+  .rating-hard  { color: var(--rating-hard); }
+  .rating-good  { color: var(--rating-good); }
+  .rating-easy  { color: var(--rating-easy); }
+}

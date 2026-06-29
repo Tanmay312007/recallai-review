@@ -1,0 +1,10 @@
+# Optional local override. Copy to docker-compose.override.yml to customise
+# ports or credentials without editing the tracked docker-compose.yml.
+# docker compose merges override.yml automatically.
+#
+# services:
+#   postgres:
+#     ports:
+#       - "5433:5432"   # use a non-default host port
+#     environment:
+#       POSTGRES_PASSWORD: a-better-local-password

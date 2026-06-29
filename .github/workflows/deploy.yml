@@ -1,0 +1,29 @@
+# RecallAI — Deploy Pipeline (PROMPT §11).
+# Placeholder for Phase 1. Actual deployment steps (ECS, Terraform) are
+# added once the infrastructure module (Phase 1+) and CI are stable.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        required: true
+        default: "staging"
+        type: choice
+        options:
+          - staging
+          - production
+
+# TODO(spec): Add ECS deploy steps, Terraform plan/apply, health-check gates.
+
+jobs:
+  deploy:
+    name: Deploy (${{ github.event.inputs.environment || 'staging' }})
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'staging' }}
+    steps:
+      - name: Placeholder
+        run: echo "Deploy workflow — implementation pending infrastructure setup."
