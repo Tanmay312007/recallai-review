@@ -28,9 +28,21 @@ export function requestInterceptor(
   config: InternalAxiosRequestConfig,
 ): InternalAxiosRequestConfig {
   const accessToken = tokenManager.get();
-  if (accessToken && config.headers) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  if (!accessToken) {
+    return config;
   }
+
+  const headers = config.headers;
+  if (!headers) {
+    return config;
+  }
+
+  if (typeof headers.set === 'function') {
+    headers.set('Authorization', `Bearer ${accessToken}`);
+  } else if (typeof headers === 'object') {
+    (headers as Record<string, unknown>).Authorization = `Bearer ${accessToken}`;
+  }
+
   return config;
 }
 

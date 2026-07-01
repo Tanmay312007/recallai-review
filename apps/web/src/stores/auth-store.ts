@@ -2,7 +2,6 @@ import { create } from 'zustand';
 import {
   api,
   tokenManager,
-  setLogoutHandler,
   fromAxiosError,
 } from '@/lib/api';
 import type { AuthSessionResponse } from '@/lib/api/types';
@@ -10,6 +9,7 @@ import type { AuthSessionResponse } from '@/lib/api/types';
 export type AuthStatus =
   | 'initializing'
   | 'authenticating'
+  | 'refreshing'
   | 'authenticated'
   | 'unauthenticated';
 
@@ -25,9 +25,15 @@ interface AuthState {
   clear: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set, get) => {
-  let logoutHandlerWired = false;
+function applyAuthenticatedSession(
+  data: AuthSessionResponse,
+  set: (state: Partial<AuthState>) => void,
+): void {
+  tokenManager.set(data.accessToken);
+  set({ user: data.user, status: 'authenticated' });
+}
 
+export const useAuthStore = create<AuthState>((set) => {
   const logout = async (): Promise<void> => {
     try {
       await api.auth.post('/auth/logout');
@@ -35,7 +41,7 @@ export const useAuthStore = create<AuthState>((set, get) => {
       // Best-effort — clear state regardless of network outcome.
     }
     tokenManager.clear();
-    set({ user: null, status: 'unauthenticated' as const });
+    set({ user: null, status: 'unauthenticated' });
   };
 
   return {
@@ -43,19 +49,11 @@ export const useAuthStore = create<AuthState>((set, get) => {
     status: 'initializing',
 
     initialize: async () => {
-      if (!logoutHandlerWired) {
-        setLogoutHandler(() => {
-          get().logout();
-        });
-        logoutHandlerWired = true;
-      }
-
       set({ status: 'initializing' });
 
       try {
         const data = await api.auth.post<AuthSessionResponse>('/auth/refresh');
-        tokenManager.set(data.accessToken);
-        set({ user: data.user, status: 'authenticated' });
+        applyAuthenticatedSession(data, set);
       } catch {
         tokenManager.clear();
         set({ user: null, status: 'unauthenticated' });
@@ -70,8 +68,7 @@ export const useAuthStore = create<AuthState>((set, get) => {
           '/auth/login',
           { email, password },
         );
-        tokenManager.set(data.accessToken);
-        set({ user: data.user, status: 'authenticated' });
+        applyAuthenticatedSession(data, set);
       } catch (err) {
         set({ status: 'unauthenticated' });
         throw fromAxiosError(err);
@@ -90,8 +87,7 @@ export const useAuthStore = create<AuthState>((set, get) => {
           '/auth/register',
           { email, password, name },
         );
-        tokenManager.set(data.accessToken);
-        set({ user: data.user, status: 'authenticated' });
+        applyAuthenticatedSession(data, set);
       } catch (err) {
         set({ status: 'unauthenticated' });
         throw fromAxiosError(err);
@@ -101,10 +97,11 @@ export const useAuthStore = create<AuthState>((set, get) => {
     logout,
 
     refreshSession: async () => {
+      set({ status: 'refreshing' });
+
       try {
         const data = await api.auth.post<AuthSessionResponse>('/auth/refresh');
-        tokenManager.set(data.accessToken);
-        set({ user: data.user, status: 'authenticated' });
+        applyAuthenticatedSession(data, set);
       } catch (err) {
         tokenManager.clear();
         set({ user: null, status: 'unauthenticated' });
