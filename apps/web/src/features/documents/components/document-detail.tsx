@@ -11,6 +11,8 @@ import { useProcessing } from '@/features/processing/hooks/use-processing';
 import { ProcessingStatus } from '@/features/processing/components/processing-status';
 import { DocumentPreview } from '@/features/processing/components/document-preview';
 import { KnowledgePipeline } from '@/features/knowledge/components/knowledge-pipeline';
+import { useKnowledge } from '@/features/knowledge/hooks/use-knowledge';
+import { FlashcardPipeline } from '@/features/flashcards/components/flashcard-pipeline';
 
 interface DocumentDetailProps {
   documentId: string;
@@ -29,6 +31,8 @@ export function DocumentDetail({ documentId }: DocumentDetailProps) {
     retryProcessing,
     isProcessing,
   } = useProcessing(documentId);
+
+  const { chunks } = useKnowledge(documentId);
 
   const [hasStarted, setHasStarted] = useState(false);
 
@@ -181,6 +185,11 @@ export function DocumentDetail({ documentId }: DocumentDetailProps) {
             documentId={documentId}
             normalizedDocument={job.normalizedDocument}
             processingComplete={true}
+          />
+          <FlashcardPipeline
+            documentId={documentId}
+            chunks={chunks}
+            knowledgeReady={chunks.length > 0}
           />
         </>
       )}
