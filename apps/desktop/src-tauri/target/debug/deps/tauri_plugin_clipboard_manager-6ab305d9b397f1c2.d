@@ -1,0 +1,8 @@
+C:\Users\shaht\OneDrive\Desktop\recallai\apps\desktop\src-tauri\target\debug\deps\tauri_plugin_clipboard_manager-6ab305d9b397f1c2.d: C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\lib.rs C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\desktop.rs C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\commands.rs C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\error.rs
+
+C:\Users\shaht\OneDrive\Desktop\recallai\apps\desktop\src-tauri\target\debug\deps\libtauri_plugin_clipboard_manager-6ab305d9b397f1c2.rmeta: C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\lib.rs C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\desktop.rs C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\commands.rs C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\error.rs
+
+C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\lib.rs:
+C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\desktop.rs:
+C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\commands.rs:
+C:\Users\shaht\.cargo\registry\src\index.crates.io-1949cf8c6b5b557f\tauri-plugin-clipboard-manager-2.3.2\src\error.rs:

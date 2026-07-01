@@ -11,7 +11,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Transpile the monorepo shared package so Next.js can consume its ESM output.
-  transpilePackages: ['@recallai/shared'],
+  transpilePackages: ['@lumora/shared'],
 
   reactStrictMode: true,
 

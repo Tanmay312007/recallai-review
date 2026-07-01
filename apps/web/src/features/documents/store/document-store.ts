@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 import { documentService } from '../services/document-service';
 import { validateFile } from '../utilities/validation';
 import type {

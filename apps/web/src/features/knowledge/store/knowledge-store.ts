@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import type { KnowledgeChunk, KnowledgeDocument } from '@recallai/shared';
+import type { KnowledgeChunk, KnowledgeDocument } from '@lumora/shared';
 
 interface KnowledgeState {
   knowledge: Record<string, KnowledgeDocument>;

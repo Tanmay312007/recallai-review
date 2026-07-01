@@ -1,4 +1,4 @@
-import type { ProcessingStage } from '@recallai/shared';
+import type { ProcessingStage } from '@lumora/shared';
 
 export type { ProcessingStage };
 

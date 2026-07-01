@@ -1,7 +1,7 @@
 import { logger } from '@/lib/logger';
 import type { ReviewCard, ReviewRating, ReviewSessionState, SessionProgress, ReviewRatingRecord } from '../types';
 import { ratingToNumber, scheduleCard } from '../scheduler/fsrs';
-import type { FsrsStateSnapshot } from '@recallai/shared';
+import type { FsrsStateSnapshot } from '@lumora/shared';
 
 export interface SessionActions {
   start: () => void;

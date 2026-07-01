@@ -12,7 +12,7 @@ import type {
 import { buildReviewQueue, getNextCardFromQueue } from '../services/review-queue';
 import { createSession, type SessionActions } from '../session/review-session';
 import { calculateDailyStats } from '../statistics/review-stats';
-import type { FsrsStateSnapshot } from '@recallai/shared';
+import type { FsrsStateSnapshot } from '@lumora/shared';
 
 interface ReviewState {
   queue: ReviewQueue;

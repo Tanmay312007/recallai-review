@@ -1,66 +1,109 @@
-/**
- * RecallAI — Global CSS (PROMPT §8.1 Design System — OKLCH Color Tokens).
- *
- * These are the authoritative design tokens. Tailwind utility classes in
- * tailwind.config.ts reference these variables. Components must never use
- * hardcoded hex values — always reference a variable from :root.
- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* ── Backgrounds (PROMPT §8.1 verbatim) ──────────────────────────── */
-  --bg-base: oklch(14% 0.01 260);
-  --bg-surface: oklch(18% 0.01 260);
-  --bg-elevated: oklch(22% 0.015 260);
-  --bg-overlay: oklch(26% 0.015 260);
-
-  /* ── Text ──────────────────────────────────────────────────────────── */
-  --text-primary: oklch(94% 0.005 260);
-  --text-secondary: oklch(65% 0.01 260);
-  --text-muted: oklch(45% 0.01 260);
-  --text-disabled: oklch(35% 0.01 260);
-
-  /* ── Brand ──────────────────────────────────────────────────────────── */
-  --brand: oklch(65% 0.18 255);
-  --brand-hover: oklch(70% 0.18 255);
-  --brand-subtle: oklch(25% 0.06 255);
-
-  /* ── Semantic ──────────────────────────────────────────────────────── */
-  --success: oklch(72% 0.17 145);
-  --warning: oklch(80% 0.17 70);
-  --error: oklch(62% 0.22 25);
-  --info: oklch(70% 0.15 230);
-
-  /* ── FSRS Rating Colors ─────────────────────────────────────────────── */
-  --rating-again: oklch(62% 0.22 25);   /* red */
-  --rating-hard: oklch(75% 0.18 50);    /* orange */
-  --rating-good: oklch(72% 0.17 145);   /* green */
-  --rating-easy: oklch(70% 0.15 230);   /* blue */
-}
-
 @layer base {
+  :root {
+    /* ── Backgrounds ──────────────────────────────────── */
+    --bg-base: oklch(14% 0.01 260);
+    --bg-surface: oklch(18% 0.01 260);
+    --bg-elevated: oklch(22% 0.015 260);
+    --bg-overlay: oklch(26% 0.015 260);
+
+    /* ── Text ──────────────────────────────────────────── */
+    --text-primary: oklch(94% 0.005 260);
+    --text-secondary: oklch(65% 0.01 260);
+    --text-muted: oklch(45% 0.01 260);
+    --text-disabled: oklch(35% 0.01 260);
+
+    /* ── Brand ──────────────────────────────────────────── */
+    --brand: oklch(65% 0.18 255);
+    --brand-hover: oklch(70% 0.18 255);
+    --brand-subtle: oklch(25% 0.06 255);
+
+    /* ── Semantic ──────────────────────────────────────── */
+    --success: oklch(72% 0.17 145);
+    --warning: oklch(80% 0.17 70);
+    --error: oklch(62% 0.22 25);
+    --info: oklch(70% 0.15 230);
+
+    /* ── Rating Colors ─────────────────────────────────── */
+    --rating-again: oklch(62% 0.22 25);
+    --rating-hard: oklch(75% 0.18 50);
+    --rating-good: oklch(72% 0.17 145);
+    --rating-easy: oklch(70% 0.15 230);
+
+    /* ── Borders ────────────────────────────────────────── */
+    --border: oklch(30% 0.01 260);
+    --border-hover: oklch(35% 0.015 260);
+
+    /* ── Focus ──────────────────────────────────────────── */
+    --focus-ring: oklch(65% 0.18 255);
+
+    /* ── Shadows ────────────────────────────────────────── */
+    --shadow-low: 0 1px 2px 0 rgb(0 0 0 / 0.15), 0 1px 3px 0 rgb(0 0 0 / 0.10);
+    --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.20), 0 2px 4px -2px rgb(0 0 0 / 0.15);
+    --shadow-high: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.20);
+    --shadow-overlay: 0 20px 25px -5px rgb(0 0 0 / 0.30), 0 8px 10px -6px rgb(0 0 0 / 0.20);
+  }
+
+  .light {
+    --bg-base: oklch(98% 0.005 260);
+    --bg-surface: oklch(96% 0.005 260);
+    --bg-elevated: oklch(100% 0 0);
+    --bg-overlay: oklch(88% 0.005 260);
+
+    --text-primary: oklch(14% 0.01 260);
+    --text-secondary: oklch(40% 0.01 260);
+    --text-muted: oklch(60% 0.01 260);
+    --text-disabled: oklch(72% 0.01 260);
+
+    --brand: oklch(55% 0.22 255);
+    --brand-hover: oklch(50% 0.22 255);
+    --brand-subtle: oklch(88% 0.06 255);
+
+    --border: oklch(85% 0.01 260);
+    --border-hover: oklch(75% 0.015 260);
+
+    --shadow-low: 0 1px 2px 0 rgb(0 0 0 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.03);
+    --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.04);
+    --shadow-high: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-overlay: 0 20px 25px -5px rgb(0 0 0 / 0.10), 0 8px 10px -6px rgb(0 0 0 / 0.06);
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
   }
 
-  /* Focus ring for accessibility (keyboard navigation). */
   *:focus-visible {
-    @apply outline-2 outline-offset-2 outline-brand;
+    @apply outline-2 outline-offset-2;
+    outline-color: var(--focus-ring);
+  }
+
+  ::selection {
+    background-color: var(--brand-subtle);
+    color: var(--brand);
+  }
+
+  * {
+    border-color: var(--border);
   }
 }
 
 @layer components {
-  /* Shared utility: card surface treatment. */
   .card-surface {
-    @apply rounded-lg bg-background-elevated border border-bg-overlay;
+    @apply rounded-lg bg-background-elevated border;
+    border-color: var(--border);
   }
 
-  /* Rating button colors — used in the review session (§8.2). */
   .rating-again { color: var(--rating-again); }
   .rating-hard  { color: var(--rating-hard); }
   .rating-good  { color: var(--rating-good); }
   .rating-easy  { color: var(--rating-easy); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }

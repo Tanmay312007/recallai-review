@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 import type { DocumentFilters, DocumentListMeta } from '../types';
 import { STATUS_OPTIONS, TYPE_OPTIONS } from '../types';
 import { formatFileSize } from '../utilities/validation';

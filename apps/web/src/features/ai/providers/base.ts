@@ -1,5 +1,5 @@
 import { logger } from '@/lib/logger';
-import type { CompletionRequest, CompletionResponse } from '@recallai/shared';
+import type { CompletionRequest, CompletionResponse } from '@lumora/shared';
 import type { AiProviderType, AiProviderConfig } from '../types';
 import { PROVIDER_CAPABILITIES, estimateCost } from './capabilities';
 

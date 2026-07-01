@@ -1,5 +1,5 @@
 {
-  "extends": "@recallai/tsconfig/nextjs.json",
+  "extends": "@lumora/tsconfig/nextjs.json",
   "compilerOptions": {
     "rootDir": ".",
     "baseUrl": ".",

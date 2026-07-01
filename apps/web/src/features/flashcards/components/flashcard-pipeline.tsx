@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import { useFlashcards } from '../hooks/use-flashcards';
 import { FlashcardList } from './flashcard-list';
 

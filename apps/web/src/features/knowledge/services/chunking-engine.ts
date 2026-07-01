@@ -9,7 +9,7 @@ import type {
   KnowledgeChunk,
   ChunkMetadata,
   KnowledgeDocument,
-} from '@recallai/shared';
+} from '@lumora/shared';
 import type { ChunkingOptions } from '../types';
 import { DEFAULT_CHUNKING_OPTIONS, estimateTokens, estimateReadingTimeSeconds } from '../types';
 

@@ -1,4 +1,4 @@
-import type { DocumentPreviewData } from '@recallai/shared';
+import type { DocumentPreviewData } from '@lumora/shared';
 import type { NormalizedDocument } from '../types';
 
 interface DocumentPreviewProps {

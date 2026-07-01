@@ -20,12 +20,12 @@ import {
   Logger,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ErrorCode } from '@recallai/shared';
+import { ErrorCode } from '@lumora/shared';
 import type {
   RegisterRequest,
   LoginRequest,
   UserDto,
-} from '@recallai/shared';
+} from '@lumora/shared';
 import type { User } from '@prisma/client';
 import { PrismaService } from '../../shared/prisma/prisma.service.js';
 import { CryptoService } from './services/crypto.service.js';

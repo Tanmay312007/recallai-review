@@ -1,7 +1,7 @@
 /**
  * Environment variable validation (PROMPT §13). Runs at NestJS startup so
  * the service fails fast with a clear message if any required variable is
- * missing. Uses Zod for validation — the same Zod already in @recallai/shared.
+ * missing. Uses Zod for validation — the same Zod already in @lumora/shared.
  *
  * The `validatedData` return type gives ConfigService.get<T>() full type
  * safety without casts.
@@ -49,7 +49,7 @@ const envSchema = z
     RESEND_API_KEY: z.string().optional(),
     FROM_EMAIL: z.string().email().optional(),
   })
-  .strict();
+  ;
 
 /** Type-safe shape of the validated environment. */
 export type EnvConfig = z.infer<typeof envSchema>;

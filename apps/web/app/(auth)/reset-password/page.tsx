@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { passwordSchema } from '@recallai/shared';
+import { passwordSchema } from '@lumora/shared';
 import { api, fromAxiosError } from '@/lib/api';
 import { AuthLayout } from '@/components/auth/auth-layout';
 import { AuthCard } from '@/components/auth/auth-card';

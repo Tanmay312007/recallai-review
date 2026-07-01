@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 import { useDocuments } from '../hooks/use-documents';
 import { useUpload } from '../hooks/use-upload';
 import { useDocumentStore } from '../store/document-store';
@@ -93,7 +93,7 @@ export function DocumentManager() {
     <div className="space-y-6 sm:space-y-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Documents</h1>
+          <h1 className="text-2xl font-bold text-foreground">My Documents</h1>
           <p className="mt-1 text-sm text-foreground-muted">
             Upload and manage your source documents
           </p>

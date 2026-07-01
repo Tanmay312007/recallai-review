@@ -43,8 +43,8 @@ export function fromAxiosError(error: unknown): ApiError {
 
   if (error instanceof AxiosError && !error.response) {
     return new ApiError(
-      'INTERNAL_001',
-      'Network error. Please check your connection.',
+      'NETWORK_001',
+      'Cannot connect to the RecallAI backend. Verify that the API server is running and NEXT_PUBLIC_API_URL is correct.',
       0,
     );
   }

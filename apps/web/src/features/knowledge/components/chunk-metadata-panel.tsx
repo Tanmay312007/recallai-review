@@ -1,4 +1,4 @@
-import type { ChunkMetadata } from '@recallai/shared';
+import type { ChunkMetadata } from '@lumora/shared';
 
 interface ChunkMetadataPanelProps {
   metadata: ChunkMetadata;

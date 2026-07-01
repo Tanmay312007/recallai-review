@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useAiGeneration } from '../hooks/use-ai-generation';
 import { AiGenerationProgress } from './ai-generation-progress';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import { AI_PROVIDER_LABELS, type AiProviderType } from '../types';
 import { aiProviderRegistry } from '../providers/registry';
 import { useFlashcardStore } from '@/features/flashcards/store/flashcard-store';

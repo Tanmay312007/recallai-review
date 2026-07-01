@@ -10,7 +10,7 @@
  * UsersModule (GET /users/me) — one mapper, no duplication.
  */
 import type { User } from '@prisma/client';
-import type { UserDto } from '@recallai/shared';
+import type { UserDto } from '@lumora/shared';
 
 export function toUserDto(user: User): UserDto {
   return {

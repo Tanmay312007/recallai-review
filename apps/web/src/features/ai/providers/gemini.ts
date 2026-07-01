@@ -1,4 +1,4 @@
-import type { CompletionRequest, CompletionResponse } from '@recallai/shared';
+import type { CompletionRequest, CompletionResponse } from '@lumora/shared';
 import type { AiProviderConfig } from '../types';
 import { BaseProvider } from './base';
 

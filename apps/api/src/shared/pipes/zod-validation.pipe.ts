@@ -1,10 +1,10 @@
 /**
- * ZodValidationPipe — bridges @recallai/shared Zod schemas into NestJS DI.
+ * ZodValidationPipe — bridges @lumora/shared Zod schemas into NestJS DI.
  *
  * PROMPT §9 mandates "reject unknown fields" on every endpoint. The shared
  * schemas already enforce this via `.strict()`; this pipe is the single place
  * the API runs them so request validation can never drift from the rules in
- * `@recallai/shared`. Reused by every module (auth, decks, cards, review …).
+ * `@lumora/shared`. Reused by every module (auth, decks, cards, review …).
  *
  * On failure it throws a 400 with the standard `{ error: { code, message } }`
  * envelope (the GlobalExceptionFilter maps BadRequestException → AUTH_001).

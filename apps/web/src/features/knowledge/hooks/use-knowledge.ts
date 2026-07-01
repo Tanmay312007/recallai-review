@@ -5,7 +5,7 @@ import { useKnowledgeStore } from '../store/knowledge-store';
 import { knowledgeService } from '../services/knowledge-service';
 import type { NormalizedDocument } from '@/features/processing/types';
 import type { ChunkingOptions } from '../types';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 
 interface UseKnowledgeReturn {
   chunks: KnowledgeChunk[];

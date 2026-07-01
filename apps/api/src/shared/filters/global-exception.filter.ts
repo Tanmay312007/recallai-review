@@ -17,7 +17,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { ErrorCode } from '@recallai/shared';
+import { ErrorCode } from '@lumora/shared';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {

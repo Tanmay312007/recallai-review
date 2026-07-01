@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 
 interface RenameDialogProps {
   document: SourceDocumentDto;

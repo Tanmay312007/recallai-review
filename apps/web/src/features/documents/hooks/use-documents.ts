@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 import { useDocumentStore } from '../store/document-store';
 import type { DocumentFilters, DocumentListMeta } from '../types';
 

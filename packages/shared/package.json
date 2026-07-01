@@ -1,28 +1,35 @@
 {
-  "name": "@recallai/shared",
+  "name": "@lumora/shared",
   "version": "0.1.0",
   "private": true,
-  "description": "Shared TypeScript types, constants, and Zod validation schemas for RecallAI",
-  "type": "module",
+  "description": "Shared TypeScript types, constants, and Zod validation schemas for Lumora",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./types": {
       "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js"
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.js",
+      "default": "./dist/types/index.js"
     },
     "./constants": {
       "types": "./dist/constants/index.d.ts",
-      "import": "./dist/constants/index.js"
+      "import": "./dist/constants/index.js",
+      "require": "./dist/constants/index.js",
+      "default": "./dist/constants/index.js"
     },
     "./validation": {
       "types": "./dist/validation/index.d.ts",
-      "import": "./dist/validation/index.js"
+      "import": "./dist/validation/index.js",
+      "require": "./dist/validation/index.js",
+      "default": "./dist/validation/index.js"
     }
   },
   "files": ["dist"],
@@ -38,7 +45,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@recallai/tsconfig": "workspace:*",
+    "@lumora/tsconfig": "workspace:*",
     "rimraf": "^6.0.1",
     "typescript": "^5.6.2",
     "vitest": "^2.1.1"

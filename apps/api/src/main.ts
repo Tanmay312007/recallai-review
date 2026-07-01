@@ -8,6 +8,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import type { Request, Response, NextFunction } from 'express';
 import { AppModule } from './app.module.js';
 import { GlobalExceptionFilter } from './shared/filters/global-exception.filter.js';
 import { RequestIdMiddleware } from './shared/middleware/request-id.middleware.js';
@@ -37,7 +38,7 @@ async function bootstrap(): Promise<void> {
   });
 
   // ── Request ID middleware (Vol V §5.2): UUID per request for tracing ─────
-  app.use(RequestIdMiddleware);
+  app.use((req: Request, res: Response, next: NextFunction) => new RequestIdMiddleware().use(req, res, next));
 
   // ── Global exception filter (PROMPT §10, Vol V §5.3) ─────────────────────
   app.useGlobalFilters(new GlobalExceptionFilter());

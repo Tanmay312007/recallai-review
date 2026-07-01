@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 import { useDocumentStore } from '../store/document-store';
 import { DocumentStatusBadge } from './document-status-badge';
 import { formatFileSize } from '../utilities/validation';

@@ -24,7 +24,7 @@ import {
   Res,
   UsePipes,
 } from '@nestjs/common';
-import { ErrorCode } from '@recallai/shared';
+import { ErrorCode } from '@lumora/shared';
 import { ConfigService } from '@nestjs/config';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
@@ -35,7 +35,7 @@ import {
   resetPasswordSchema,
   type LoginRequest,
   type RegisterRequest,
-} from '@recallai/shared';
+} from '@lumora/shared';
 import type { EnvConfig } from '../../config/env.validation.js';
 import { ZodValidationPipe } from '../../shared/pipes/zod-validation.pipe.js';
 import { Public } from './decorators/public.decorator.js';

@@ -1,5 +1,5 @@
-import type { ProviderType } from '@recallai/shared';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { ProviderType } from '@lumora/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 
 export type AiProviderType = ProviderType;
 

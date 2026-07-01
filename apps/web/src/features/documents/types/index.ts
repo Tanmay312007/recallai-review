@@ -1,4 +1,4 @@
-import type { SourceDocumentDto, ClientDocumentStatus } from '@recallai/shared';
+import type { SourceDocumentDto, ClientDocumentStatus } from '@lumora/shared';
 
 export type DocumentStatus = ClientDocumentStatus;
 

@@ -1,4 +1,4 @@
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 
 export interface LearningUnit {
   id: string;

@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useAiGenerationStore } from '../store/ai-generation-store';
 import type { Flashcard } from '@/features/flashcards/types';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import type { AiProviderType } from '../types';
 import type { BuiltPrompt } from '../services/prompt-builder';
 import type { GenerationStatus } from '../store/ai-generation-store';

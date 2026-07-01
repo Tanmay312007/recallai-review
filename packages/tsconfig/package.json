@@ -1,8 +1,8 @@
 {
-  "name": "@recallai/tsconfig",
+  "name": "@lumora/tsconfig",
   "version": "0.1.0",
   "private": true,
-  "description": "Shared TypeScript configurations for the RecallAI monorepo",
+  "description": "Shared TypeScript configurations for the Lumora monorepo",
   "files": [
     "base.json",
     "nextjs.json",

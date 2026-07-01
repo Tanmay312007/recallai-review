@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import type { Flashcard, FlashcardCardType, FlashcardDifficulty, FlashcardFilters, FlashcardValidationStatus } from '../types';
 import { runFlashcardPipeline } from '../services/flashcard-pipeline';
 import { resetValidationState } from '../validators';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 
 interface FlashcardState {
   cards: Flashcard[];

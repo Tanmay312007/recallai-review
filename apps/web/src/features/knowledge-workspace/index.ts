@@ -1,0 +1,9 @@
+export { KnowledgeWorkspaceLayout } from './components/knowledge-workspace-layout';
+export { WorkspaceHeader } from './components/workspace-header';
+export { DocumentTabs } from './components/document-tabs';
+export { DocumentReader } from './components/document-reader';
+export { AIPanel } from './components/ai-panel';
+export { NotesSection } from './components/notes-section';
+export { RelatedKnowledge } from './components/related-knowledge';
+export { useKnowledgeWorkspaceStore } from './store/knowledge-workspace-store';
+export { useKnowledgeWorkspace } from './hooks/use-knowledge-workspace';

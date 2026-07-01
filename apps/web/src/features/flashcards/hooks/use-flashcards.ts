@@ -3,7 +3,7 @@
 import { useCallback } from 'react';
 import { useFlashcardStore } from '../store/flashcard-store';
 import type { Flashcard, FlashcardCardType, FlashcardDifficulty, FlashcardFilters, FlashcardValidationStatus } from '../types';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 
 interface UseFlashcardsReturn {
   cards: Flashcard[];

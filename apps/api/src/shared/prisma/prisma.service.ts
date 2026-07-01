@@ -39,9 +39,15 @@ export class PrismaService
   }
 
   async onModuleInit(): Promise<void> {
-    // Connect to the database. In dev this confirms the schema is migrated.
-    await this.$connect();
-    this.logger.log('Database connected');
+    try {
+      await this.$connect();
+      this.logger.log('Database connected');
+    } catch (err) {
+      this.logger.warn(
+        `Database unavailable at startup — the service will work once the database becomes available. ` +
+        (err instanceof Error ? err.message : ''),
+      );
+    }
   }
 
   async onModuleDestroy(): Promise<void> {

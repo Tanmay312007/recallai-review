@@ -5,7 +5,7 @@ import type {
   KnowledgeDocument,
   KnowledgeParagraph,
   KnowledgeSection,
-} from '@recallai/shared';
+} from '@lumora/shared';
 
 export type {
   ChunkMetadata,

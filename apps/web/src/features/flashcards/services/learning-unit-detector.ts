@@ -1,4 +1,4 @@
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import { logger } from '@/lib/logger';
 import type { LearningUnit, LearningUnitType } from '../pipeline';
 

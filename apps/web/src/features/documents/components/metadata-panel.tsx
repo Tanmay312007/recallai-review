@@ -1,6 +1,6 @@
 'use client';
 
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 import { formatFileSize } from '../utilities/validation';
 import { DocumentStatusBadge } from './document-status-badge';
 

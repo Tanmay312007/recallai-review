@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/lib/auth-provider';
+import { ThemeProvider } from '@/design-system/theme';
+import { TooltipProvider } from '@/design-system/primitives/tooltip-provider';
+import { DesktopLayout } from '@/features/desktop/components/desktop-layout';
+import { CommandPalette } from '@/features/navigation/components/command-palette';
 
 /**
  * Root layout (Next.js 14 App Router).
@@ -9,9 +13,9 @@ import { AuthProvider } from '@/lib/auth-provider';
  * own nested layouts with/without the sidebar shell.
  */
 export const metadata: Metadata = {
-  title: 'RecallAI — AI-Powered Memory Infrastructure',
+  title: 'Lumora — The Intelligent Workspace for Knowledge',
   description:
-    'Transform PDFs and YouTube videos into scientifically optimized flashcards. Active recall meets spaced repetition.',
+    'Ingest, understand, organize, and act on your knowledge. AI-powered workspace for the modern knowledge worker.',
   // PWA manifest is added in Phase 10.
 };
 
@@ -21,9 +25,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="min-h-screen">
-        <AuthProvider>{children}</AuthProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <AuthProvider>
+              <DesktopLayout>
+                {children}
+                <CommandPalette />
+              </DesktopLayout>
+            </AuthProvider>
+          </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

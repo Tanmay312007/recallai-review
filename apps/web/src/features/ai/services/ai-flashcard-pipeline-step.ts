@@ -1,5 +1,5 @@
 import type { PipelineStep, PipelineInput, PipelineOutput } from '@/lib/pipeline';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import type { Flashcard } from '@/features/flashcards/types';
 import type { AiProviderType } from '../types';
 import { generateFlashcardsWithAI } from './flashcard-generation';

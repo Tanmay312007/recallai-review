@@ -1,5 +1,5 @@
-import type { ApiResponse, ApiErrorResponse, UserDto } from '@recallai/shared';
-export { ErrorCode } from '@recallai/shared';
+import type { ApiResponse, ApiErrorResponse, UserDto } from '@lumora/shared';
+export { ErrorCode } from '@lumora/shared';
 export type { ApiResponse, ApiErrorResponse, UserDto };
 
 export interface AuthSessionResponse {

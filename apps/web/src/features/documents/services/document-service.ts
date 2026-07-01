@@ -1,5 +1,5 @@
 import { api } from '@/lib/api';
-import type { ApiResponse, SourceDocumentDto } from '@recallai/shared';
+import type { ApiResponse, SourceDocumentDto } from '@lumora/shared';
 import type { DocumentFilters, DocumentListMeta } from '../types';
 
 export interface CreateDocumentPayload {

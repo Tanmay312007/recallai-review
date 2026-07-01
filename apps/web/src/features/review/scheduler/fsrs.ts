@@ -1,4 +1,4 @@
-import type { FsrsStateSnapshot } from '@recallai/shared';
+import type { FsrsStateSnapshot } from '@lumora/shared';
 import { logger } from '@/lib/logger';
 
 export type FsrsState = 0 | 1 | 2 | 3;

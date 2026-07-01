@@ -1,5 +1,5 @@
 /**
- * @recallai/shared — barrel export for constants
+ * @lumora/shared — barrel export for constants
  *
  * All cross-service constants (limits, defaults, config) live here so the API,
  * worker, and web app never disagree on a limit.

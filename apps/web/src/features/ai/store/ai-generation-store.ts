@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { logger } from '@/lib/logger';
 import type { Flashcard } from '@/features/flashcards/types';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import type { AiProviderType } from '../types';
 import { generateFlashcardsWithAI } from '../services/flashcard-generation';
 import type { BuiltPrompt } from '../services/prompt-builder';

@@ -1,4 +1,4 @@
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import { logger } from '@/lib/logger';
 import { aiProviderRegistry } from '../providers/registry';
 import { buildFlashcardPrompt, type BuiltPrompt } from './prompt-builder';
@@ -6,7 +6,7 @@ import { validateJsonResponse } from '../validators/json-schema';
 import { validateAiFlashcards, resetAiValidationState } from '../validators/flashcard-validator';
 import type { Flashcard, FlashcardCardType, FlashcardGenerationMetadata } from '@/features/flashcards/types';
 import type { AiProviderType } from '../types';
-import type { CompletionRequest } from '@recallai/shared';
+import type { CompletionRequest } from '@lumora/shared';
 import { useFlashcardStore } from '@/features/flashcards/store/flashcard-store';
 
 export interface AiFlashcardGenerationResult {
@@ -176,7 +176,7 @@ function mapBloomLevel(level: string): 'REMEMBER' | 'UNDERSTAND' | 'APPLY' | 'AN
   return valid.includes(level as typeof valid[number]) ? (level as typeof valid[number]) : 'REMEMBER';
 }
 
-function inferDifficulty(chunk: import('@recallai/shared').KnowledgeChunk | undefined): 'easy' | 'medium' | 'hard' {
+function inferDifficulty(chunk: import('@lumora/shared').KnowledgeChunk | undefined): 'easy' | 'medium' | 'hard' {
   if (!chunk) return 'medium';
   const wc = chunk.metadata.wordCount;
   if (wc < 50) return 'easy';

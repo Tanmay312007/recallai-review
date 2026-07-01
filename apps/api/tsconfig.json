@@ -1,9 +1,10 @@
 {
-  "extends": "@recallai/tsconfig/nest.json",
+  "extends": "@lumora/tsconfig/nest.json",
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
     "baseUrl": ".",
+    "tsBuildInfoFile": "dist/tsconfig.tsbuildinfo",
     "paths": {
       "@/*": ["./src/*"]
     }

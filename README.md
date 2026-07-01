@@ -1,18 +1,19 @@
-# RecallAI
+# Lumora
 
-> AI-powered memory infrastructure platform. Ingest content → AI generates Active Recall flashcards → FSRS v4 schedules optimal review.
+> The Intelligent Workspace for Knowledge. Ingest content → AI understands, organizes, and connects it → FSRS v4 schedules optimal review.
 
 **Version:** 0.1.0-alpha · **Status:** Internal — Engineering Reference
 
-This is the RecallAI monorepo. It is built per the **RecallAI Master Implementation Prompt v1.0** and the **Engineering Handbook (Volumes I–VIII)**.
+This is the Lumora monorepo.
 
 ## Monorepo Layout
 
 ```
-recallai/
+lumora/
 ├── apps/
-│   ├── web/      # Next.js 14 (App Router) PWA frontend
+│   ├── web/      # Next.js 14 (App Router) web app
 │   ├── api/      # NestJS v10 API service
+│   ├── desktop/  # Tauri v2 desktop application
 │   └── worker/   # BullMQ worker service
 ├── packages/
 │   ├── shared/   # Shared types, constants, Zod validation schemas
@@ -65,12 +66,14 @@ pnpm dev
 | Web | http://localhost:3000 |
 | API | http://localhost:3001/api/v1 |
 | API health | http://localhost:3001/health |
+| Desktop | `pnpm desktop dev` (Tauri) |
 
 ## Common Scripts
 
 ```bash
 pnpm build          # Build all workspaces (via Turborepo)
 pnpm dev            # Start web + api + worker in watch mode
+pnpm desktop:dev    # Start Tauri desktop app (dev mode)
 pnpm lint           # ESLint across the workspace
 pnpm typecheck      # tsc --noEmit across the workspace
 pnpm test           # Unit + integration tests
@@ -97,4 +100,4 @@ pnpm db:studio      # Open Prisma Studio against local DB
 
 ## License
 
-Proprietary — RecallAI Confidential. All rights reserved.
+Proprietary — Lumora Confidential. All rights reserved.

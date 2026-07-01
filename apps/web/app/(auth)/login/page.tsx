@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { loginSchema, type LoginRequest } from '@recallai/shared';
+import { loginSchema, type LoginRequest } from '@lumora/shared';
 import { useAuthStore } from '@/stores/auth-store';
 import { fromAxiosError } from '@/lib/api';
 import { AuthLayout } from '@/components/auth/auth-layout';

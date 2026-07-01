@@ -1,4 +1,4 @@
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk } from '@lumora/shared';
 import { logger } from '@/lib/logger';
 import { renderPrompt } from '../prompts/template-engine';
 import type { RenderedPrompt } from '../prompts/template-engine';

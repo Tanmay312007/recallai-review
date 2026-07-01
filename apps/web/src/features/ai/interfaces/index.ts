@@ -8,7 +8,7 @@ import type {
   SummaryStyle,
   QuizDifficulty,
 } from '../types';
-import type { KnowledgeChunk, CompletionRequest, CompletionResponse } from '@recallai/shared';
+import type { KnowledgeChunk, CompletionRequest, CompletionResponse } from '@lumora/shared';
 
 export interface FlashcardGenerator {
   generate(

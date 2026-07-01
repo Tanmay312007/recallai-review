@@ -1,6 +1,6 @@
 'use client';
 
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto } from '@lumora/shared';
 
 interface DeleteDialogProps {
   document: SourceDocumentDto;

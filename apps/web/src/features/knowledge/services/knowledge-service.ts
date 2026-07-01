@@ -1,5 +1,5 @@
 import type { NormalizedDocument } from '@/features/processing/types';
-import type { KnowledgeDocument } from '@recallai/shared';
+import type { KnowledgeDocument } from '@lumora/shared';
 import { chunkDocument } from './chunking-engine';
 import type { ChunkingOptions } from '../types';
 

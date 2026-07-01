@@ -1,5 +1,5 @@
 import type { Flashcard } from '@/features/flashcards/types';
-import type { FsrsStateSnapshot } from '@recallai/shared';
+import type { FsrsStateSnapshot } from '@lumora/shared';
 import { logger } from '@/lib/logger';
 import type { ReviewCard, ReviewQueue, ReviewQueueType } from '../types';
 import { createInitialState } from '../scheduler/fsrs';

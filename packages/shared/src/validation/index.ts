@@ -1,5 +1,5 @@
 /**
- * @recallai/shared/validation — barrel export for Zod schemas.
+ * @lumora/shared/validation — barrel export for Zod schemas.
  *
  * These schemas are the single source of truth for request validation. The
  * NestJS API uses them via a ZodValidationPipe; the web app uses them in

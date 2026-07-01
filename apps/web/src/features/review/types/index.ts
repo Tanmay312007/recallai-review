@@ -1,4 +1,4 @@
-import type { FsrsStateSnapshot } from '@recallai/shared';
+import type { FsrsStateSnapshot } from '@lumora/shared';
 import type { Flashcard } from '@/features/flashcards/types';
 
 export type ReviewRating = 'again' | 'hard' | 'good' | 'easy';
