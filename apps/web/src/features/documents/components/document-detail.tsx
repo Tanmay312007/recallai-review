@@ -15,6 +15,8 @@ import { useKnowledge } from '@/features/knowledge/hooks/use-knowledge';
 import { FlashcardPipeline } from '@/features/flashcards/components/flashcard-pipeline';
 import { AiFlashcardGenerator } from '@/features/ai/components/ai-flashcard-generator';
 import { initializeProviders } from '@/features/ai/providers/registry';
+import { QualityReviewPanel } from '@/features/quality/components/quality-review-panel';
+import type { Flashcard } from '@/features/flashcards/types';
 
 interface DocumentDetailProps {
   documentId: string;
@@ -38,6 +40,7 @@ export function DocumentDetail({ documentId }: DocumentDetailProps) {
 
   const [hasStarted, setHasStarted] = useState(false);
   const [aiInitialized, setAiInitialized] = useState(false);
+  const [generatedCards, setGeneratedCards] = useState<Flashcard[]>([]);
 
   useEffect(() => {
     fetchDocument(documentId);
@@ -204,7 +207,11 @@ export function DocumentDetail({ documentId }: DocumentDetailProps) {
           <AiFlashcardGenerator
             documentId={documentId}
             chunks={chunks}
+            onCardsGenerated={setGeneratedCards}
           />
+          {generatedCards.length > 0 && (
+            <QualityReviewPanel cards={generatedCards} />
+          )}
         </>
       )}
 

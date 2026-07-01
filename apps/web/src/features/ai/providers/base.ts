@@ -1,12 +1,14 @@
 import { logger } from '@/lib/logger';
 import type { CompletionRequest, CompletionResponse } from '@recallai/shared';
 import type { AiProviderType, AiProviderConfig } from '../types';
+import { PROVIDER_CAPABILITIES, estimateCost } from './capabilities';
 
 export interface ProviderStats {
   totalRequests: number;
   totalTokens: number;
   totalLatencyMs: number;
   failures: number;
+  totalCostUsd: number;
 }
 
 export abstract class BaseProvider {
@@ -18,6 +20,7 @@ export abstract class BaseProvider {
     totalTokens: 0,
     totalLatencyMs: 0,
     failures: 0,
+    totalCostUsd: 0,
   };
 
   constructor(config: AiProviderConfig) {
@@ -96,16 +99,27 @@ export abstract class BaseProvider {
   }
 
   protected recordSuccess(inputTokens: number, outputTokens: number, latencyMs: number): void {
+    const cost = estimateCost(this.type, inputTokens, outputTokens);
     this.stats.totalRequests++;
     this.stats.totalTokens += inputTokens + outputTokens;
     this.stats.totalLatencyMs += latencyMs;
+    this.stats.totalCostUsd += cost;
     logger.info('Provider request completed', {
       provider: this.type,
       model: this.model,
       inputTokens,
       outputTokens,
       latencyMs,
+      costUsd: cost,
     });
+  }
+
+  getCapabilities() {
+    return PROVIDER_CAPABILITIES[this.type];
+  }
+
+  estimateCost(inputTokens: number, outputTokens: number): number {
+    return estimateCost(this.type, inputTokens, outputTokens);
   }
 
   protected recordFailure(): void {

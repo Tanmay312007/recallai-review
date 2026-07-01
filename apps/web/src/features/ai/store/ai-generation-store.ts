@@ -6,6 +6,8 @@ import type { AiProviderType } from '../types';
 import { generateFlashcardsWithAI } from '../services/flashcard-generation';
 import type { BuiltPrompt } from '../services/prompt-builder';
 import { aiProviderRegistry } from '../providers/registry';
+import type { GenerationAnalytics } from '@/features/quality/types';
+import { analyticsService } from '@/features/quality/services/analytics-service';
 
 export type GenerationStatus =
   | 'idle'
@@ -34,7 +36,9 @@ interface AiGenerationState {
   model: string;
   totalTokens: number;
   durationMs: number;
+  estimatedCostUsd: number;
   errors: string[];
+  generationAnalytics: GenerationAnalytics | null;
 
   generate: (chunks: KnowledgeChunk[], documentId: string, options?: { provider?: AiProviderType; count?: number; title?: string }) => Promise<void>;
   reset: () => void;
@@ -51,7 +55,9 @@ export const useAiGenerationStore = create<AiGenerationState>((set) => ({
   model: '',
   totalTokens: 0,
   durationMs: 0,
+  estimatedCostUsd: 0,
   errors: [],
+  generationAnalytics: null,
 
   generate: async (chunks, documentId, options) => {
     const startTime = Date.now();
@@ -76,6 +82,21 @@ export const useAiGenerationStore = create<AiGenerationState>((set) => ({
 
       const durationMs = Date.now() - startTime;
 
+      const estimatedCostUsd = providerObj?.estimateCost(result.totalTokens, result.totalTokens) ?? 0;
+      const generationAnalytics = analyticsService.computeGenerationAnalytics({
+        provider: result.provider,
+        model: modelName,
+        promptVersion: 'flashcard-generation@1.0',
+        durationMs,
+        tokens: result.totalTokens,
+        costUsd: estimatedCostUsd,
+        cards: result.flashcards,
+        validations: {
+          passed: result.validationResults.filter((v) => v.valid).length,
+          failed: result.validationResults.filter((v) => !v.valid).length,
+        },
+      });
+
       set({
         status: result.errors.length > 0 ? 'failed' : 'completed',
         progress: result.errors.length > 0 ? 'Generation completed with errors' : 'Generation complete',
@@ -84,7 +105,9 @@ export const useAiGenerationStore = create<AiGenerationState>((set) => ({
         prompt: result.prompt,
         totalTokens: result.totalTokens,
         durationMs,
+        estimatedCostUsd,
         errors: result.errors,
+        generationAnalytics,
       });
 
       logger.info('AI flashcard generation completed', {
@@ -121,7 +144,9 @@ export const useAiGenerationStore = create<AiGenerationState>((set) => ({
       model: '',
       totalTokens: 0,
       durationMs: 0,
+      estimatedCostUsd: 0,
       errors: [],
+      generationAnalytics: null,
     });
   },
 }));
