@@ -22,10 +22,13 @@ export interface CompletionRequest {
   jobId?: string;
 }
 
+/** Supported AI provider identifiers. */
+export type ProviderType = 'openai' | 'anthropic' | 'google' | 'custom';
+
 /** Normalized completion result returned by the gateway. */
 export interface CompletionResponse {
   content: string;
-  provider: 'openai' | 'anthropic' | 'google';
+  provider: ProviderType;
   model: string;
   inputTokens: number;
   outputTokens: number;

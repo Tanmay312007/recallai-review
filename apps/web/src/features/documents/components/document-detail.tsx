@@ -13,6 +13,8 @@ import { DocumentPreview } from '@/features/processing/components/document-previ
 import { KnowledgePipeline } from '@/features/knowledge/components/knowledge-pipeline';
 import { useKnowledge } from '@/features/knowledge/hooks/use-knowledge';
 import { FlashcardPipeline } from '@/features/flashcards/components/flashcard-pipeline';
+import { AiFlashcardGenerator } from '@/features/ai/components/ai-flashcard-generator';
+import { initializeProviders } from '@/features/ai/providers/registry';
 
 interface DocumentDetailProps {
   documentId: string;
@@ -35,10 +37,18 @@ export function DocumentDetail({ documentId }: DocumentDetailProps) {
   const { chunks } = useKnowledge(documentId);
 
   const [hasStarted, setHasStarted] = useState(false);
+  const [aiInitialized, setAiInitialized] = useState(false);
 
   useEffect(() => {
     fetchDocument(documentId);
   }, [documentId, fetchDocument]);
+
+  useEffect(() => {
+    if (!aiInitialized) {
+      initializeProviders();
+      setAiInitialized(true);
+    }
+  }, [aiInitialized]);
 
   useEffect(() => {
     if (doc && !hasStarted && !isProcessing && !job) {
@@ -190,6 +200,10 @@ export function DocumentDetail({ documentId }: DocumentDetailProps) {
             documentId={documentId}
             chunks={chunks}
             knowledgeReady={chunks.length > 0}
+          />
+          <AiFlashcardGenerator
+            documentId={documentId}
+            chunks={chunks}
           />
         </>
       )}

@@ -8,7 +8,7 @@ import type {
   SummaryStyle,
   QuizDifficulty,
 } from '../types';
-import type { KnowledgeChunk } from '@recallai/shared';
+import type { KnowledgeChunk, CompletionRequest, CompletionResponse } from '@recallai/shared';
 
 export interface FlashcardGenerator {
   generate(
@@ -45,21 +45,14 @@ export interface VectorStore {
   clear(documentId: string): Promise<void>;
 }
 
-export interface LLMProvider {
-  generate(prompt: string, options?: {
-    temperature?: number;
-    maxTokens?: number;
-    systemPrompt?: string;
-  }): Promise<string>;
-  generateStream(
-    prompt: string,
-    onToken: (token: string) => void,
-    options?: {
-      temperature?: number;
-      maxTokens?: number;
-      systemPrompt?: string;
-    },
-  ): Promise<void>;
+/** Low-level AI provider — wraps a concrete API (OpenAI, Gemini, Claude, Local). */
+export interface AiProvider {
+  readonly type: import('../types').AiProviderType;
   readonly model: string;
-  readonly provider: string;
+  generate(request: CompletionRequest): Promise<CompletionResponse>;
+  generateStream(
+    request: CompletionRequest,
+    onToken: (token: string) => void,
+  ): Promise<CompletionResponse>;
+  estimateTokens(text: string): number;
 }
