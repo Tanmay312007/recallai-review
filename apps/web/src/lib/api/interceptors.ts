@@ -28,7 +28,7 @@ export function requestInterceptor(
   config: InternalAxiosRequestConfig,
 ): InternalAxiosRequestConfig {
   const accessToken = tokenManager.get();
-  if (accessToken) {
+  if (accessToken && config.headers) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
@@ -64,7 +64,12 @@ export function createResponseInterceptor(instance: AxiosInstance) {
     (originalRequest as unknown as Record<string, unknown>)._retry = true;
 
     try {
-      const { data } = await authClientRef!.post<{ accessToken: string }>(
+      if (!authClientRef) {
+        throw new Error(
+          'Auth client is not configured. Ensure setAuthClient() is called during app initialization.',
+        );
+      }
+      const { data } = await authClientRef.post<{ accessToken: string }>(
         '/auth/refresh',
       );
       tokenManager.set(data.accessToken);
