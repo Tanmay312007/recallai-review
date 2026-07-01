@@ -2,6 +2,7 @@ import type { DocumentStatus } from '../types';
 import { DOCUMENT_STATUS_LABELS } from '../types';
 
 const statusStyles: Record<DocumentStatus, string> = {
+  PENDING: 'bg-bg-overlay text-foreground-secondary',
   UPLOADING: 'bg-brand-subtle text-brand',
   UPLOADED: 'bg-bg-overlay text-foreground-secondary',
   QUEUED: 'bg-bg-overlay text-foreground-secondary',

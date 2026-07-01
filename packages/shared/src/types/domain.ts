@@ -176,3 +176,78 @@ export interface NotificationPrefsDto {
   timezone: string;
   marketingEmails: boolean;
 }
+
+/** ─── Knowledge Pipeline Domain ─── */
+
+/** Heading level for section hierarchy. */
+export type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
+
+/** A single section within a normalized document. */
+export interface KnowledgeSection {
+  id: string;
+  title: string;
+  headingLevel: HeadingLevel;
+  paragraphIndices: number[];
+  characterOffsetStart: number;
+  characterOffsetEnd: number;
+}
+
+/** A single paragraph within a section. */
+export interface KnowledgeParagraph {
+  id: string;
+  sectionId: string;
+  index: number;
+  content: string;
+  characterOffsetStart: number;
+  characterOffsetEnd: number;
+  wordCount: number;
+}
+
+/** Metadata attached to each knowledge chunk. */
+export interface ChunkMetadata {
+  documentId: string;
+  chunkId: string;
+  sourcePage: number | null;
+  sectionTitle: string;
+  headingLevel: HeadingLevel;
+  paragraphIndex: number;
+  characterOffsetStart: number;
+  characterOffsetEnd: number;
+  wordCount: number;
+  estimatedTokens: number;
+  readingTimeSeconds: number;
+  embeddingId: string | null;
+  vectorId: string | null;
+}
+
+/** A single knowledge chunk — the atomic unit for AI processing. */
+export interface KnowledgeChunk {
+  id: string;
+  documentId: string;
+  content: string;
+  sectionId: string;
+  paragraphId: string;
+  metadata: ChunkMetadata;
+  createdAt: string;
+}
+
+/** The complete knowledge representation of a document. */
+export interface KnowledgeDocument {
+  documentId: string;
+  sections: KnowledgeSection[];
+  paragraphs: KnowledgeParagraph[];
+  chunks: KnowledgeChunk[];
+  totalWords: number;
+  totalTokens: number;
+  createdAt: string;
+}
+
+/** Preview-specific data (separate from full metadata). */
+export interface DocumentPreviewData {
+  documentId: string;
+  textSnippet: string;
+  firstPageContent: string | null;
+  pageCount: number;
+  thumbnailUrl: string | null;
+  hasImages: boolean;
+}

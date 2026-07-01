@@ -10,6 +10,7 @@ import { MIME_TYPES } from '../types';
 import { useProcessing } from '@/features/processing/hooks/use-processing';
 import { ProcessingStatus } from '@/features/processing/components/processing-status';
 import { DocumentPreview } from '@/features/processing/components/document-preview';
+import { KnowledgePipeline } from '@/features/knowledge/components/knowledge-pipeline';
 
 interface DocumentDetailProps {
   documentId: string;
@@ -174,7 +175,14 @@ export function DocumentDetail({ documentId }: DocumentDetailProps) {
       />
 
       {job?.stage === 'COMPLETED' && job.normalizedDocument && (
-        <DocumentPreview document={job.normalizedDocument} />
+        <>
+          <DocumentPreview document={job.normalizedDocument} />
+          <KnowledgePipeline
+            documentId={documentId}
+            normalizedDocument={job.normalizedDocument}
+            processingComplete={true}
+          />
+        </>
       )}
 
       <AiPipelinePlaceholder

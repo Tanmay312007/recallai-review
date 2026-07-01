@@ -1,14 +1,6 @@
-import type { SourceDocumentDto } from '@recallai/shared';
+import type { SourceDocumentDto, ClientDocumentStatus } from '@recallai/shared';
 
-export type DocumentStatus =
-  | 'UPLOADING'
-  | 'UPLOADED'
-  | 'QUEUED'
-  | 'PROCESSING'
-  | 'COMPLETED'
-  | 'FAILED'
-  | 'CANCELED'
-  | 'RETRYING';
+export type DocumentStatus = ClientDocumentStatus;
 
 export interface UploadingFile {
   id: string;
@@ -64,6 +56,7 @@ export const MIME_TYPES: Record<SupportedExtension, string[]> = {
 export const MAX_FILE_SIZE_BYTES = 50 * 1024 * 1024;
 
 export const DOCUMENT_STATUS_LABELS: Record<DocumentStatus, string> = {
+  PENDING: 'Pending',
   UPLOADING: 'Uploading',
   UPLOADED: 'Uploaded',
   QUEUED: 'Queued',

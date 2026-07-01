@@ -1,11 +1,6 @@
-export type ProcessingStage =
-  | 'QUEUED'
-  | 'PREPARING'
-  | 'EXTRACTING'
-  | 'NORMALIZING'
-  | 'COMPLETED'
-  | 'FAILED'
-  | 'CANCELED';
+import type { ProcessingStage } from '@recallai/shared';
+
+export type { ProcessingStage };
 
 export interface ProcessingTimestamps {
   queuedAt?: string;
@@ -24,6 +19,11 @@ export interface ProcessingJob {
   timestamps: ProcessingTimestamps;
   error?: string;
   normalizedDocument?: NormalizedDocument;
+  /** Queue-compatible fields for future async workers */
+  jobId?: string;
+  queueStatus?: 'pending' | 'active' | 'completed' | 'failed';
+  retryCount?: number;
+  maxRetries?: number;
 }
 
 export interface DocumentMetadata {

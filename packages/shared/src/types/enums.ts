@@ -29,6 +29,45 @@ export const DOCUMENT_STATUSES: readonly DocumentStatus[] = [
   'FAILED',
 ];
 
+/**
+ * Client-side document status — superset of DocumentStatus.
+ * Includes UI-only states for upload and retry lifecycle.
+ */
+export type ClientDocumentStatus =
+  | DocumentStatus
+  | 'UPLOADING'
+  | 'UPLOADED'
+  | 'QUEUED'
+  | 'CANCELED'
+  | 'RETRYING';
+export const CLIENT_DOCUMENT_STATUSES: readonly ClientDocumentStatus[] = [
+  ...DOCUMENT_STATUSES,
+  'UPLOADING',
+  'UPLOADED',
+  'QUEUED',
+  'CANCELED',
+  'RETRYING',
+];
+
+/** Processing pipeline stage (§6 processing pipeline). */
+export type ProcessingStage =
+  | 'QUEUED'
+  | 'PREPARING'
+  | 'EXTRACTING'
+  | 'NORMALIZING'
+  | 'COMPLETED'
+  | 'FAILED'
+  | 'CANCELED';
+export const PROCESSING_STAGES: readonly ProcessingStage[] = [
+  'QUEUED',
+  'PREPARING',
+  'EXTRACTING',
+  'NORMALIZING',
+  'COMPLETED',
+  'FAILED',
+  'CANCELED',
+];
+
 /** Flashcard format (§5 enum CardType). */
 export type CardType = 'BASIC' | 'CLOZE' | 'DEFINITION';
 export const CARD_TYPES: readonly CardType[] = [
