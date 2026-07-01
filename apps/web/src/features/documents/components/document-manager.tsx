@@ -20,6 +20,8 @@ export function DocumentManager() {
     loading,
     error,
     setSearch,
+    setStatusFilter,
+    setTypeFilter,
     setSort,
     setOrder,
     setPage,
@@ -146,6 +148,8 @@ export function DocumentManager() {
           filters={filters}
           loading={false}
           onSearch={setSearch}
+          onStatusFilter={setStatusFilter}
+          onTypeFilter={setTypeFilter}
           onSort={setSort}
           onOrder={setOrder}
           onPage={setPage}

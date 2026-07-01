@@ -17,6 +17,8 @@ export const documentService = {
       page: filters.page,
       perPage: filters.perPage,
       ...(filters.search ? { search: filters.search } : {}),
+      ...(filters.status ? { status: filters.status } : {}),
+      ...(filters.type ? { type: filters.type } : {}),
       ...(filters.sort ? { sort: filters.sort } : {}),
       ...(filters.order ? { order: filters.order } : {}),
     };

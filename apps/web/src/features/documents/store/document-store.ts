@@ -5,6 +5,7 @@ import { validateFile } from '../utilities/validation';
 import type {
   DocumentFilters,
   DocumentListMeta,
+  DocumentStatus,
   UploadingFile,
 } from '../types';
 
@@ -24,6 +25,8 @@ interface DocumentState {
 
   fetchDocuments: () => Promise<void>;
   setSearch: (search: string) => void;
+  setStatusFilter: (status: string | undefined) => void;
+  setTypeFilter: (type: string | undefined) => void;
   setSort: (sort: DocumentFilters['sort']) => void;
   setOrder: (order: DocumentFilters['order']) => void;
   setPage: (page: number) => void;
@@ -80,6 +83,16 @@ export const useDocumentStore = create<DocumentState>((set, get) => ({
   setSearch: (search) => {
     const { filters } = get();
     set({ filters: { ...filters, search, page: 1 } });
+  },
+
+  setStatusFilter: (status: string | undefined) => {
+    const { filters } = get();
+    set({ filters: { ...filters, status: status as DocumentStatus | undefined, page: 1 } });
+  },
+
+  setTypeFilter: (type: string | undefined) => {
+    const { filters } = get();
+    set({ filters: { ...filters, type, page: 1 } });
   },
 
   setSort: (sort) => {

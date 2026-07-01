@@ -12,6 +12,8 @@ interface UseDocumentsReturn {
   loading: boolean;
   error: string | null;
   setSearch: (search: string) => void;
+  setStatusFilter: (status: string | undefined) => void;
+  setTypeFilter: (type: string | undefined) => void;
   setSort: (sort: DocumentFilters['sort']) => void;
   setOrder: (order: DocumentFilters['order']) => void;
   setPage: (page: number) => void;
@@ -26,6 +28,8 @@ export function useDocuments(): UseDocumentsReturn {
   const error = useDocumentStore((s) => s.error);
   const fetchDocuments = useDocumentStore((s) => s.fetchDocuments);
   const setSearch = useDocumentStore((s) => s.setSearch);
+  const setStatusFilter = useDocumentStore((s) => s.setStatusFilter);
+  const setTypeFilter = useDocumentStore((s) => s.setTypeFilter);
   const setSort = useDocumentStore((s) => s.setSort);
   const setOrder = useDocumentStore((s) => s.setOrder);
   const setPage = useDocumentStore((s) => s.setPage);
@@ -41,6 +45,8 @@ export function useDocuments(): UseDocumentsReturn {
     loading,
     error,
     setSearch,
+    setStatusFilter,
+    setTypeFilter,
     setSort,
     setOrder,
     setPage,

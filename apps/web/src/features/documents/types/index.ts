@@ -31,6 +31,8 @@ export interface DocumentFilters {
   order?: 'asc' | 'desc';
   page: number;
   perPage: number;
+  status?: DocumentStatus;
+  type?: string;
 }
 
 export type DocumentDto = SourceDocumentDto;
@@ -71,3 +73,18 @@ export const DOCUMENT_STATUS_LABELS: Record<DocumentStatus, string> = {
   CANCELED: 'Canceled',
   RETRYING: 'Retrying',
 };
+
+export const STATUS_OPTIONS = [
+  { value: '', label: 'All statuses' },
+  { value: 'UPLOADED', label: 'Uploaded' },
+  { value: 'QUEUED', label: 'Queued' },
+  { value: 'PROCESSING', label: 'Processing' },
+  { value: 'COMPLETED', label: 'Completed' },
+  { value: 'FAILED', label: 'Failed' },
+] as const;
+
+export const TYPE_OPTIONS = [
+  { value: '', label: 'All types' },
+  { value: 'PDF', label: 'PDF' },
+  { value: 'YOUTUBE', label: 'YouTube' },
+] as const;

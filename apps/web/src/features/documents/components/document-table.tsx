@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import type { SourceDocumentDto } from '@recallai/shared';
 import type { DocumentFilters, DocumentListMeta } from '../types';
+import { STATUS_OPTIONS, TYPE_OPTIONS } from '../types';
 import { formatFileSize } from '../utilities/validation';
 import { DocumentStatusBadge } from './document-status-badge';
 import { DocumentActions } from './document-actions';
@@ -14,6 +15,8 @@ interface DocumentTableProps {
   filters: DocumentFilters;
   loading: boolean;
   onSearch: (search: string) => void;
+  onStatusFilter: (status: string | undefined) => void;
+  onTypeFilter: (type: string | undefined) => void;
   onSort: (sort: DocumentFilters['sort']) => void;
   onOrder: (order: DocumentFilters['order']) => void;
   onPage: (page: number) => void;
@@ -28,6 +31,8 @@ export function DocumentTable({
   filters,
   loading,
   onSearch,
+  onStatusFilter,
+  onTypeFilter,
   onSort,
   onOrder,
   onPage,
@@ -60,23 +65,51 @@ export function DocumentTable({
   if (!loading && documents.length === 0) {
     return (
       <div className="space-y-4">
-        <SearchBar
-          value={filters.search ?? ''}
-          onChange={onSearch}
-          onKeyDown={handleSearchKeyDown}
-        />
-        <DocumentEmptyState hasSearch={hasSearch} />
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <SearchBar
+            value={filters.search ?? ''}
+            onChange={onSearch}
+            onKeyDown={handleSearchKeyDown}
+          />
+          <FilterSelect
+            value={filters.status ?? ''}
+            onChange={onStatusFilter}
+            options={STATUS_OPTIONS}
+            label="Status"
+          />
+          <FilterSelect
+            value={filters.type ?? ''}
+            onChange={onTypeFilter}
+            options={TYPE_OPTIONS}
+            label="Type"
+          />
+        </div>
+        <DocumentEmptyState hasSearch={hasSearch || Boolean(filters.status || filters.type)} />
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <SearchBar
-        value={filters.search ?? ''}
-        onChange={onSearch}
-        onKeyDown={handleSearchKeyDown}
-      />
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+        <SearchBar
+          value={filters.search ?? ''}
+          onChange={onSearch}
+          onKeyDown={handleSearchKeyDown}
+        />
+        <FilterSelect
+          value={filters.status ?? ''}
+          onChange={onStatusFilter}
+          options={STATUS_OPTIONS}
+          label="Status"
+        />
+        <FilterSelect
+          value={filters.type ?? ''}
+          onChange={onTypeFilter}
+          options={TYPE_OPTIONS}
+          label="Type"
+        />
+      </div>
 
       <div className="-mx-4 overflow-x-auto sm:mx-0 sm:rounded-lg sm:border sm:border-bg-overlay">
         <table className="min-w-full divide-y divide-bg-overlay">
@@ -175,7 +208,7 @@ function SearchBar({
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <div className="relative">
+    <div className="relative flex-1">
       <label htmlFor="doc-search" className="sr-only">
         Search documents
       </label>
@@ -204,6 +237,33 @@ function SearchBar({
         className="w-full rounded-lg border border-bg-overlay bg-background-surface py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-foreground-disabled focus:outline-none focus:ring-2 focus:ring-brand"
       />
     </div>
+  );
+}
+
+function FilterSelect({
+  value,
+  onChange,
+  options,
+  label,
+}: {
+  value: string;
+  onChange: (v: string | undefined) => void;
+  options: readonly { value: string; label: string }[];
+  label: string;
+}) {
+  return (
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value || undefined)}
+      aria-label={label}
+      className="rounded-lg border border-bg-overlay bg-background-surface px-3 py-2.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-brand"
+    >
+      {options.map((opt) => (
+        <option key={opt.value} value={opt.value}>
+          {opt.label}
+        </option>
+      ))}
+    </select>
   );
 }
 
